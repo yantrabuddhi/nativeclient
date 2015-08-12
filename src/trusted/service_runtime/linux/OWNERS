@@ -1,0 +1,2 @@
+# For build file review since per-file is not inherited.
+per-file *.gn=bradnelson@chromium.org
