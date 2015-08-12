@@ -1,0 +1,69 @@
+Git HOWTO
+In the instructions below, please note that upstream is the same thing as https://github.com/opencog/opencog -- its a synonym, and it means the same thing. Likewise, origin is a synonym for https://username@github.com/username/opencog. These two don't have to actually be called 'origin' and 'upstream', but, by convention, they often are. When you push to origin, you are pushing to your own fork of opencog. If you're trying to understand this workflow, read each numbered step along with the numbered notes below.
+
+If this is the first time you are using git on the machines, follow this steps to configure git for associating your commits with your personal information. You can see the commit log by running git log within a repository
+git config --global user.name "Your Full Name"
+git config --global user.email “an email that you don't mind being public”
+Browse to https://github.com/opencog/opencog, login and click Fork. Note that this workflow is for all repositories at https://github.com/opencog
+In a terminal:
+git clone https://github.com/YOUR-USERNAME/opencog
+cd opencog
+git remote add upstream https://github.com/opencog/opencog
+git config remote.pushdefault origin # sets the default remote for pushes to be origin
+git config push.default current # sets the default push behavior to current
+git checkout master
+git pull upstream master
+git push origin master
+git branch my-latest-fix
+git checkout my-latest-fix
+hack hack hack
+On finishing a self-contained work, no matter how small it is,
+git add file_name_1 file_name_2 ... file_name_n
+git commit -m "commit message"
+On finishing your hack for the day, or it has been a while since you sent a pull-request, so as to ensure your changes are in sync with what is going on upstream/master.
+git pull --rebase upstream master
+git push -u origin my-latest-fix
+When you believe your work is ready to merged with upstream/master, browse to your personal branch, click Pull Request and wait for your pull request to be reviewed. Create new branches or work with old branches at any time by returning to step 3.6.
+Optionally, after you've finished working with a branch, and after any pull request has been merged or otherwise closed, and you wish to completely delete the branch:
+git checkout master
+git branch -d my-latest-fix
+git push origin :my-latest-fix
+Optionally, to work with others' branches, e.g.:
+git remote add linas https://github.com/linas/opencog
+git fetch linas
+git branch compile linas/compile
+git checkout compile
+Optionally, to test pull requests of other contributors locally
+git config --global alias.pr '!f() { git fetch $1 refs/pull/$2/head:refs/remotes/pr/$2; }; f' (addition of system wide git alias)
+git pr upstream 804 (804 can be another pull request number)
+git checkout pr/804
+test test test
+git checkout master
+git branch -rd pr/804 (clean up)
+Optionally, for those who have write access to github repos, to prevent accidental pushs to upstream.
+git remote set-url --push upstream "to_prevent_accidental_push_to_upstream"
+
+Notes (item numbers below correspond to item numbers above)
+
+Initial machine wide configuration of git that will associate your name and email with all commits.
+Creating your personal fork, out of which you can manage numerous consecutive and/or parallel personal branches. This is a one-off step.
+A remote tracked repository in opencog/.git/config is created with the name origin (a git convention). This is a one-off step.
+...
+A remote tracked repository in opencog/.git/config is created with the name upstream. This is a one-off step.
+as commented above. This is a one-off step.
+as commented above. This is a one-off step.
+Return to this step before creating new branches, and to update your GitHub fork's master branch with the OpenCog master (upstream) branch (next step). It is best to never make commits to your local master, but only ever to branches.
+Keeps your local 'master' branch in sync with OpenCog master branch.
+Push to keep the master branch of your github fork updated with the master branch of opencog/opencog.
+Creates a new local working branch
+Moves to the new branch
+...
+Make as many commits as you like before going on to the next step. Make sure you don't add intermidate compiler outputs, binary files as well as backup files (mostly ending with ~) to your commit. In addition big test-datasets should be commited to https://github.com/opencog/test-datasets
+Pull commits from the master branch and play your changes over top. Run this command anytime you want to sync a local branch with the master branch.
+Push your work to your personal branch on Github
+Aka a GitHub PR.
+If you've finished working with a branch, including making changes suggested in Pull Request comments
+Return to this step before deleting branches.
+optionally delete your local copy of the branch.
+optionally delete your GitHub copy of the branch.
+Now, you don't have to delete the branch, or wait for the merge; you can keep on working in that branch, and then issue new Github pull requests for new work. This could become a problem only if one of the series of Github pull request was denied for some reason -- then you've got a bunch of work depending on a patch that is being denied. Thus, if you have several logically unrelated tasks, its best to do each in a separate branch. But, if you have a long series of tasks all working on the same thing, and its all more-or-less your current project, it would be very unlikely that anything would be denied, so just keep working in the same branch, issue Github pull requests every now and then (to get your code upstream), and maybe pull from master every now and then, (if you really need to). And, in the meantime, if you spot some other completely unrelated bug that you want to fix, you can always make a new branch (locally, off of master), fix it, push it, and go back to your usual working branch like nothing happened.
