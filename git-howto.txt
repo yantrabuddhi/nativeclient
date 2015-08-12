@@ -67,3 +67,6 @@ Return to this step before deleting branches.
 optionally delete your local copy of the branch.
 optionally delete your GitHub copy of the branch.
 Now, you don't have to delete the branch, or wait for the merge; you can keep on working in that branch, and then issue new Github pull requests for new work. This could become a problem only if one of the series of Github pull request was denied for some reason -- then you've got a bunch of work depending on a patch that is being denied. Thus, if you have several logically unrelated tasks, its best to do each in a separate branch. But, if you have a long series of tasks all working on the same thing, and its all more-or-less your current project, it would be very unlikely that anything would be denied, so just keep working in the same branch, issue Github pull requests every now and then (to get your code upstream), and maybe pull from master every now and then, (if you really need to). And, in the meantime, if you spot some other completely unrelated bug that you want to fix, you can always make a new branch (locally, off of master), fix it, push it, and go back to your usual working branch like nothing happened.
+
+
+git archive master | bzip2 >source-tree.tar.bz2
